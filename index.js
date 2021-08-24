@@ -2,7 +2,6 @@ const xlsx = require("xlsx");
 const _ = require("lodash");
 const fs = require("fs");
 const path = require("path");
-const { Console } = require("console");
 const defaultConfig = {
     debugMode: false
 };
@@ -71,7 +70,7 @@ class ExcelParser {
 
         // Get workbook data
         this.parseResult = GetWorkSheets(this.source);
-        
+
         return this;
     }
 
