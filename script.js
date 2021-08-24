@@ -28,5 +28,5 @@ const source = argv.source;
 let target = argv.target == "" ? source.replace(/\.\w+$/,'.json'): argv.target;
 
 const parser = new ExcelParser();
-const result = parser.ParseJson(source,{headerAsIndex:true}).GetJson();
+const result = parser.ParseJson(source).GetJson();
 parser.SaveAsJson(target);

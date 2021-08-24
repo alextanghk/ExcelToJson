@@ -25,7 +25,29 @@ function numToLetter(num) {
     printToLetter(num);
     return result;
 }
+function GetWorkSheets(source) {
+    // Get workbook data
+    const workbook = xlsx.readFile(source);
 
+    const sheets = workbook.Sheets;
+    const sheetsName = Object.keys(sheets);
+
+    console.log("Total number of sheets: %d", sheetsName.length);
+
+    let result = [];
+    sheetsName.forEach(n => {
+        const sheet = sheets[n];
+        const data = xlsx.utils.sheet_to_json(sheet, { defval:"" }, {range: sheet["!ref"]});
+        result.push({
+            name: n,
+            total: data.length,
+            header: data.length > 0 ? Object.keys(data[0]):[],
+            data: data
+        })
+    })
+
+    return result;
+}
 class ExcelParser {
 
     constructor(config) {
@@ -48,26 +70,8 @@ class ExcelParser {
         this.source = source;
 
         // Get workbook data
-        const workbook = xlsx.readFile(this.source);
-
-        const sheets = workbook.Sheets;
-        const sheetsName = Object.keys(sheets);
-
-        console.log("Total number of sheets: %d", sheetsName.length);
-
-        let result = [];
-        sheetsName.forEach(n => {
-            const sheet = sheets[n];
-            const data = xlsx.utils.sheet_to_json(sheet, {defval:""}, {range: sheet["!ref"]});
-            result.push({
-                name: n,
-                total: data.length,
-                header: data.length > 0 ? Object.keys(data[0]):[],
-                data: data
-            })
-        })
-
-        this.parseResult = result;
+        this.parseResult = GetWorkSheets(this.source);
+        
         return this;
     }
 
